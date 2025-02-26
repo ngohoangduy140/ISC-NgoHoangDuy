@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body {
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: black;
+        }
+        canvas {
+            background-color: black;
+            transform: rotate(-15deg);
+        }
+    </style>
+</head>
+<body>
+    <canvas id="canvas"></canvas>
+    <script>
+        const canvas = document.getElementById("canvas");
+        const ctx = canvas.getContext("2d");
+        canvas.width = 1000;
+        canvas.height = 700;
+
+        const lineLength = 130, lineWidth = 1, totalLines = 800, delay = 8, offset = 0.5;
+        const colors = [
+            [255, 0, 0],     
+            [0, 0, 255],      
+            [128, 0, 128],    
+            [255, 105, 180],  
+            [255, 165, 0]     
+        ];
+        let currentColorIndex = 0, index = 0;
+
+        function getColor(fade) {
+            let [r, g, b] = colors[currentColorIndex];
+            r = Math.floor(r * (1 - fade) + 255 * fade);
+            g = Math.floor(g * (1 - fade) + 255 * fade);
+            b = Math.floor(b * (1 - fade) + 255 * fade);
+            return `rgb(${r}, ${g}, ${b})`;
+        }
+
+        function drawLine(x, y, color) {
+            ctx.beginPath();
+            ctx.moveTo(x, y);
+            ctx.lineTo(x, y + lineLength);
+            ctx.strokeStyle = color;
+            ctx.lineWidth = lineWidth;
+            ctx.stroke();
+        }
+
+        function animateLines() {
+            if (index < totalLines) {
+                let x = index * lineWidth;
+                let y = index * offset;
+                let fade = index / totalLines; // Giá trị từ 0 -> 1
+                drawLine(x, y, getColor(fade));
+                index++;
+                setTimeout(animateLines, delay);
+            } else {
+                setTimeout(() => {
+                    ctx.clearRect(0, 0, canvas.width, canvas.height);
+                    currentColorIndex = (currentColorIndex + 1) % colors.length;
+                    index = 0;
+                    animateLines();
+                }, 500);
+            }
+        }
+
+        animateLines();
+    </script>
+</body>
+</html>

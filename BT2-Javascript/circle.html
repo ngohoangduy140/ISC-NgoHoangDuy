@@ -1,0 +1,60 @@
+
+
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+         * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        .container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh; 
+            background-color: blue; 
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <canvas id="myCanvas" width="500" height="500"></canvas>
+    </div>
+    
+
+    <script>
+        const canvas = document.getElementById("myCanvas");
+        const ctx = canvas.getContext("2d");
+
+        let radius = 5;
+        let maxRadius = 200; 
+        let minRadius = 5;  
+        let growthRate = 0.4; // Tốc độ 
+        let growing = true; // Trạng thái 
+
+        function drawCircle() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            ctx.beginPath();
+            ctx.arc(canvas.width / 2, canvas.height / 2, radius, 0, Math.PI * 2);
+            ctx.fillStyle = "yellow";
+            ctx.fill();
+            ctx.closePath();
+
+            radius += growthRate; // Tăng kích thước
+
+            if (radius >= maxRadius) {
+                radius = minRadius; // Reset 
+            }
+
+            requestAnimationFrame(drawCircle); 
+        }
+
+        drawCircle();
+    </script>
+</body>
+</html>
